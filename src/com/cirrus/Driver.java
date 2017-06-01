@@ -95,9 +95,37 @@ public class Driver extends Application {
 						return;
 					}
 
-					// If everything is okay.
-					resultLabel.setText("");
-					System.out.println(min + " " + max);
+					// -----------------------------------------------------------
+					// If everything is okay, go for calculation
+					if (min < 0 || max < 0) {
+						resultLabel.setText("* Opps! No negative numbers please.");
+						return;
+					}
+
+					boolean isFound = false;
+
+					for (int num = max; num >= min; num--) {
+						int reminder, sum = 0;
+						int original = num;
+						int temp = num;
+
+						while (temp > 0) {
+							reminder = temp % 10;
+							sum = (sum * 10) + reminder;
+							temp /= 10;
+						}
+
+						if (sum == original) {
+							resultLabel.setText("The biggest palindrom number between " + min + " and " + max + " is "
+									+ original + ".");
+							isFound = true;
+							break;
+						}
+					}
+
+					if (!isFound)
+						resultLabel.setText("No palindrom found!!!");
+					// -----------------------------------------------------------
 				}
 			});
 
