@@ -9,6 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -38,6 +40,7 @@ public class Driver extends Application {
 
 			// Creating a Grid Pane to display all the fields we created so far
 			GridPane gridPane = new GridPane();
+			gridPane.setBackground(new Background(new BackgroundFill(Color.WHEAT, null, null)));
 			gridPane.setMinSize(500, 500);
 			gridPane.setPadding(new Insets(20, 20, 20, 20));
 			gridPane.setVgap(5);
@@ -61,6 +64,7 @@ public class Driver extends Application {
 			gridPane.getChildren().add(resultLabel);
 
 			// Setting an action for the Search button
+			searchButton.defaultButtonProperty().bind(searchButton.focusedProperty());
 			searchButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -85,7 +89,8 @@ public class Driver extends Application {
 						max = Integer.parseInt(maxString);
 					} catch (NumberFormatException ex) {
 						// If not, display nice error message
-						resultLabel.setText("* Please enter valid inputs.\n* This application only accepts integers.");
+						resultLabel.setText(
+								"* Please enter valid inputs.\n* This application only accepts positive integers.");
 						return;
 					}
 
@@ -95,13 +100,17 @@ public class Driver extends Application {
 						return;
 					}
 
-					// -----------------------------------------------------------
-					// If everything is okay, go for calculation
 					if (min < 0 || max < 0) {
 						resultLabel.setText("* Opps! No negative numbers please.");
 						return;
 					}
+					if (min > Integer.MAX_VALUE || max > Integer.MAX_VALUE) {
+						resultLabel.setText("* Opps! It's out of my range.");
+						return;
+					}
 
+					// -----------------------------------------------------------
+					// If everything is okay, go for calculation
 					boolean isFound = false;
 
 					for (int num = max; num >= min; num--) {
@@ -130,7 +139,6 @@ public class Driver extends Application {
 			});
 
 			Scene scene = new Scene(gridPane);
-			scene.setFill(Color.WHEAT);
 			primaryStage.setTitle("Palindrom Application");
 			primaryStage.setScene(scene);
 			primaryStage.show();
